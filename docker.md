@@ -106,3 +106,120 @@ So behind the scenes, Docker uses a Linux Virtual Machine inside which all the c
 ## Commands
 
 - `docker run <image_name>`
+
+Run a Docker Container
+
+```
+╭─ash@ash ~
+╰─$ sudo docker run busybox
+
+```
+
+- `docker run <image_name> <overriding_default_command>`
+
+Run a Docker Container and override the default command
+```
+╭─ash@ash ~
+╰─$ sudo docker run busybox echo hello                                    130 ↵
+hello
+```
+
+- `docker ps`
+
+List all running Containers
+
+```
+╭─ash@ash ~
+╰─$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+851b38891150        busybox             "sh"                3 seconds ago       Up 3 seconds                            serene_taussig
+
+```
+
+- `docker ps -a`
+
+List all the Containers
+
+```
+╭─ash@ash ~
+╰─$ docker ps -a
+CONTAINER ID        IMAGE                        COMMAND                  CREATED             STATUS                      PORTS               NAMES
+851b38891150        busybox                      "sh"                     5 minutes ago       Exited (0) 11 seconds ago                       serene_taussig
+14cff1f78e17        busybox                      "sh"                     8 minutes ago       Exited (0) 8 minutes ago                        jolly_merkle
+6aab5ee7f6a1        busybox                      "sh"                     10 minutes ago      Exited (0) 10 minutes ago                       nice_merkle
+0eb7b7f1a846        busybox                      "exec -it"               11 minutes ago      Created                                         cranky_ptolemy
+46c8b84ff00a        busybox                      "-it"                    12 minutes ago      Created                                         kind_bhabha
+e97a850fcdc2        hello-world                  "-it"                    12 minutes ago
+
+and so on...
+```
+
+## Container Lifecycle
+
+docker **run** = docker **create** + docker **start**
+
+- Creating a container: `docker create <image_name>`
+
+Here, only the file system is copied from the image to the hard drive segment for this container.
+
+- Starting a container: `docker start -a <continer_id>`
+
+Using this, the startup command of the container is executed
+
+The `-a` flag tells the continer to eatch for output from the container and print it at the same time
+
+- Restarting stopped containers: `docker start -a <previous_container_id>`
+
+```
+╭─ash@ash ~
+╰─$ docker run busybox echo hello
+hello
+╭─ash@ash ~
+╰─$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                     PORTS               NAMES
+3d52c4883562        busybox             "echo hello"        4 seconds ago       Exited (0) 3 seconds ago                       stoic_lalande
+14cff1f78e17        busybox             "sh"                35 minutes ago      Up 12 minutes                                  jolly_merkle
+╭─ash@ash ~
+╰─$ docker start -a 3d52c4883562
+hello
+```
+
+- Deleting all stopped containers: `docker system prune`
+
+```
+╭─ash@ash ~
+╰─$ docker system prune
+WARNING! This will remove:
+  - all stopped containers
+  - all networks not used by at least one container
+  - all dangling images
+  - all dangling build cache
+
+Are you sure you want to continue? [y/N] y
+Deleted Containers:
+3d52c4883562c2725502a3636ed54a998bcf46a2c3e0ff0605baf894811ecbea
+
+Total reclaimed space: 0B
+```
+
+- Getting logs from a Container: `docker logs <container_id>`
+
+Prints all the logs that were generated while running the container
+
+```
+╭─ash@ash ~
+╰─$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                     PORTS               NAMES
+ccf3c4243b07        busybox             "echo hello"        7 seconds ago       Exited (0) 5 seconds ago                       boring_mendel
+14cff1f78e17        busybox             "sh"                38 minutes ago      Up 15 minutes                                  jolly_merkle
+╭─ash@ash ~
+╰─$ docker logs ccf3c4243b07
+hello
+
+```
+
+- Stop running containers
+
+1. `docker stop <container_id>`
+
+2. `docker kill <container_id>`
