@@ -428,3 +428,9 @@ Till now we've seen how to build an image and run a container out of it. The fol
 3. On another terminal, use `docker ps` to get the id of the current running container
 4. Run `docker commit -c 'CMD ["redis-server"]' <container-id>`. This commands helps us to mention the startup command of the container. It prints the id of the new image.
 5. Run `docker run <new-image-id>` to launch a container with the newly created image.
+
+## Dockerizing Node Application - Project
+
+Let's get all the theory in practice. We shall be making a Node Application and then Dockerizing it.
+
+Head over to [Project-1](/Docker/project-node-app/README.md)
